@@ -1,0 +1,55 @@
+name: building
+query: building.txt
+raster: Google
+vector: OSM
+ratio: 0.7
+experiment_name: "_Google_OSM"
+data_dir: data
+local_db: C:\Users\lasit\Desktop\DeepMapper\backend\data\OSM\osm-database
+osm_database: osm-database
+database: vectors
+image_database: raster-database
+osm_gan: osm-gan
+dataset: coco_images
+min_area: 250
+zoom: 19
+bit: 24
+m_pixel: 0.596
+tmp_format: "png" #'jpg'
+coco_dataset: coco_images_19
+bing_key: AqYncquHDjkhdMd9qGePXhKe4tBT2KaKXAsmBlCRizLRQup4xut3qVNmV3xs0hB_
+coco_threshold: 0.25,0.75
+logs: logs
+tile_server: 127.0.0.2:8081
+model_dir: 0
+model_name: 0
+gan_data_path: C:\Users\lasit\Desktop\app\database\kay_2022_may_z20
+threshold_lower: 0.25
+threshold_upper: 1.0
+fallback_gan_path: C:\Users\lasit\Desktop\app\database\leftover_coco_images_z20
+prediction:
+  pred_ext: "_fake_B.png"
+  min_area: 100
+  result: "results"
+  conda_env: "torch"
+  dataroot: "database"
+  model_name: "osm-gan-carswell-july"
+  model_func: "pix2pix"
+  direction: "AtoB"
+  rdp_save_path: "rdp_footprints"
+REG:
+  changes_save_path: "poly_gan"
+  save_path: "test"
+  model_name: "REG-GAN-01"
+  model_func: "pix2pix"
+  direction: "AtoB"
+  results_path: "final_footprints"
+MERGE:
+  geojson_root: "geojsons"
+  save_dir: "final_footprints"
+CHANGESET:
+  version: 1.0
+  generator: 'DeepMapper by TU Dublin GIS Research Group (c) 2023'
+  osm_version: 0.6
+API:
+  token: niroshan_carswell_2023

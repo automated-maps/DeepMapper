@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Polygon Results</title>
+  </head>
+  <body>
+    <h1>Polygon Results</h1>
+    <p>Here are the coordinates for the polygon you submitted:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>X</th>
+          <th>Y</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for point in polygon_coords %}
+        <tr>
+          <td>{{ point.x }}</td>
+          <td>{{ point.y }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<html>
+<head>
+    <title>DeepMapper</title>
+    
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.draw.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.sidebar.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/mapbox.v3.2.0.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/libs/ui-lightness/jquery-ui-1.10.3.custom.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bbox.css')}}" />
+
+    
+    <script src="{{url_for('static', filename='js/libs/jquery-1.9.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/libs/jquery-ui-1.10.3.custom.js')}}"></script>
+    <script src="{{url_for('static', filename='js/libs/ZeroClipboard.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/mapbox.v3.2.0.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.draw.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.sidebar.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/wkt.parser.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/proj4-src.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/proj4leaflet.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/test.runner.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bbox.js')}}"></script>
+    
+    <style>
+		.right {
+			float: right;
+            margin-right: 20px; 
+            margin-bottom: 80px;
+            background-color: #007bff; 
+            color: #fff; 
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+		}
+	</style>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var eventSource = new EventSource('/stream');
+            var cardBody = document.querySelector('.card-body');
+
+            eventSource.onmessage = function(event) {
+                var eventData = event.data;
+                console.log(eventData);
+                if (eventData === 'redirect') {
+                    window.location.href = 'map_QA.html';
+                } else {
+                    var messageElement = document.createElement('p');
+                    messageElement.textContent = eventData;
+                    cardBody.appendChild(messageElement);
+                }
+            };
+        });
+    </script>
+</head>
+<body>    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Add the map column -->
+            <div class="col-md-9">
+                <div id="map"></div>
+                <div id="map-ui"></div>
+                <div id="rsidebar"></div>
+                <div id="lsidebar"></div>
+            </div>
+
+            <!-- Add the notifications column -->
+            <div class="col-md-3" style="padding: 10px;">
+                <div class="card">
+                <div class="card-header" ><center>Notifications</center></div>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <section id="info-box" style="width: 1600px;">
+                <div id="info">
+                    <div id="wgscoords" class="coords">
+                        <div id="mouse">
+                            <span id="mouselabel" class="bboxlabel">Mouse</span>
+                            <span id="mousepos" class="bboxllpossmall"></span>
+                        </div>
+                        <div id="bbounds">
+                            <span id="bbboundslabel" class="bboxlabel">Box</span>
+                            <img id="boxboundsbtn" data-clipboard-target="boxbounds" src="{{url_for('static', filename='/images/copy.png')}}">
+                                <span id="boxbounds2" class="bboxllpos"></span>
+                        </div>                
+                    </div>
+                </div>
+            </section>
+            <section id="info-box">
+                <form id="polygon-form" method="POST" action="/process_polygon">
+                    <input type="hidden" id="boxbounds" name="boxbounds">
+                    <button class="right" type="submit">Submit Polygon</button>
+                </form>
+            </section>
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>                                                                                                                          
+
+</html>

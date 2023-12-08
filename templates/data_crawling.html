@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Crawling</title>
+    <style>
+        .css-typing p {
+            border-right: .50em solid rgb(0, 0, 0);
+            font-family: "Courier";
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            }
+        .css-typing p:nth-child(1) {
+            width: 25%;
+            -webkit-animation: type 2s steps(40, end);
+            animation: type 2s steps(40, end);
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+        }
+
+            .css-typing p:nth-child(2) {
+            width: 25%;
+            opacity: 0;
+            -webkit-animation: type2 2s steps(40, end);
+            animation: type2 2s steps(40, end);
+            -webkit-animation-delay: 2s;
+            animation-delay: 2s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            }
+
+            .css-typing p:nth-child(3) {
+            width: 25%;
+            opacity: 0;
+            -webkit-animation: type3 5s steps(40, end), blink .5s step-end infinite alternate;
+            animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+            -webkit-animation-delay: 4s;
+            animation-delay: 4s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            }
+
+            .css-typing p:nth-child(4) {
+            width: 25%;
+            opacity: 0;
+            -webkit-animation: type4 5s steps(40, end), blink .5s step-end infinite alternate;
+            animation: type4 5s steps(20, end), blink .5s step-end infinite alternate;
+            -webkit-animation-delay: 8s;
+            animation-delay: 8s;
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            }
+
+            @keyframes type {
+            0% {
+                width: 0;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                border: none;
+            }
+            }
+
+            @-webkit-keyframes type {
+            0% {
+                width: 0;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                border: none;
+            }
+            }
+
+            @keyframes type2 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                opacity: 1;
+                border: none;
+            }
+            }
+
+            @-webkit-keyframes type2 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                opacity: 1;
+                border: none;
+            }
+            }
+
+            @keyframes type3 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                opacity: 1;
+                border: none;
+            }
+            }
+
+            @-webkit-keyframes type3 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+            }
+
+            @keyframes type4 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            99.9% {
+                border-right: .50em solid rgb(0, 0, 0);
+            }
+            100% {
+                opacity: 1;
+                border: none;
+            }
+            }
+
+            @-webkit-keyframes type4 {
+            0% {
+                width: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+            }
+
+            @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+            }
+            @-webkit-keyframes blink {
+            50% {
+                border-color: tranparent;
+            }
+            }
+    </style>
+</head>
+<body>
+        <div class="css-typing">
+            <p>session id: {{session_id}}</p>
+            <p>Data Crawling Initiated...</p>
+            <p>Coordinates : {{polygon_coords}}</p>
+            <p>Data Crawling Completed...</p>
+        </div>
+        
+        
+        <section id="info-box">
+            <form id="crawling-form" method="POST" action="/osm_gan">
+                <button class="right" type="submit">Initiate OSM-GAN</button>
+            </form>
+        </section>
+</body>
+</html>

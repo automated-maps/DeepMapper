@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Verify | Upload</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.draw.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/leaflet.sidebar.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/maps/mapbox.v3.2.0.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/libs/ui-lightness/jquery-ui-1.10.3.custom.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bbox.css')}}" />
+
+
+    <script src="{{url_for('static', filename='js/libs/jquery-1.9.1.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/libs/jquery-ui-1.10.3.custom.js')}}"></script>
+    <script src="{{url_for('static', filename='js/libs/ZeroClipboard.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/mapbox.v3.2.0.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.draw.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/leaflet.sidebar.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/wkt.parser.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/proj4-src.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/proj4leaflet.js')}}"></script>
+    <script src="{{url_for('static', filename='js/maps/test.runner.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bbox.js')}}"></script>
+    <style>
+        .modal-container {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .right {
+            float: right;
+            margin-right: 20px;
+            margin-bottom: 80px;
+            /* background-color: #007bff;  */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .left{
+            float: left;
+            margin-left: 20px;
+            margin-bottom: 80px;
+            /* background-color: #007bff;  */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Add the map column -->
+            <div class="col-md-9">
+                <div id="map" style="height: 800px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <center>OSM ChangeSets</center>
+                    </div>
+                    <div class="card-body" id="changeset-data">
+
+                    </div>
+                </div>
+            </div>
+            
+            <button class="right btn btn-danger" type="submit" onclick="openForm()">Add Additional Tags</button>
+            
+            <button class="left btn btn-success float-left" type="submit">Submit ChangeSet</button>
+        
+        </div>
+    </div>
+
+    <div id="modalContainer" class="modal-container">
+        <div class="modal-content"> <span class="close" onclick="closeForm()">&times;</span>
+            <h2>Additional Tags</h2>
+            <form id="additionalTagsForm" class="needs-validation" novalidate>
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="address">Address:</label>
+                  <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                  <label for="height">Height:</label>
+                  <input type="number" class="form-control" id="height" name="height" required>
+                </div>
+                <div class="form-group">
+                  <label for="city">City:</label>
+                  <input type="text" class="form-control" id="city" name="addr:city" required>
+                </div>
+                <div class="form-group">
+                  <label for="building">Building:</label>
+                  <input type="text" class="form-control" id="building" name="building" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+        </div>
+    </div>
+
+    <!-- load leaflet-geoman -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@geoman-io/leaflet-geoman-free@2.14.2/dist/leaflet-geoman.min.css">
+    <script src="../static/js/maps/leaflet-new.js"></script>
+    <script src="../static/js/maps/leaflet-geoman.min.js"></script>
+    <script>
+        // create leaflet map
+        var map = L.map('map', {editable: true}).setView([53.356225, -6.281595], 17);
+        // add google earth maps base layer
+        var googleSat = L.tileLayer('https://www.google.com/maps/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        });
+        googleSat.addTo(map);
+
+
+        //  load geojsons from flask
+        var geojsons = {{geojsons | safe}};
+        var incomming_changesets = {{changesets | safe}};
+
+        var changesetDataDiv = document.getElementById('changeset-data');
+
+        for (var j=0; j<incomming_changesets.length; j++){
+            var changeset = incomming_changesets[j];
+            // console.log(changeset);
+            // <pre class='brush: xml;'>"+changeset+"</pre>
+
+            var p = document.createElement('pre');
+            p.textContent = changeset;
+            changesetDataDiv.appendChild(p);
+        }
+
+        // loop through the geojsons and add to map
+        for (var i = 0; i < geojsons.length; i++) {
+            var geojson = JSON.parse(geojsons[i]);
+            // console.log(geojson);
+            var layer = L.geoJson(geojson).addTo(map);
+        }
+        
+        // add GeomanControl to enable editing of geojson features
+        map.pm.addControls({
+            position: 'topleft',
+            drawCircle: false,
+            drawMarker: false,
+            drawCircleMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawPolygon: true,
+            // turn off draw text
+            drawText: false,
+            drawCircle: false,
+            cutPolygon: true,
+            editMode: true,
+            dragMode: true,
+            removalMode: true,
+        });
+
+
+        // create updated geojson if user edits a feature and logs to console
+        map.on('draw:edited', function (e) {
+            var layers = e.layers;
+            layers.eachLayer(function (layer) {
+                var editedGeoJSON = layer.toGeoJSON();
+                // Perform any necessary operations with the edited GeoJSON
+                console.log(editedGeoJSON);
+                // You can save the edited GeoJSON back to the database or perform any other required actions
+            });
+        });
+
+
+        
+        function openForm() {
+            var modalContainer = document.getElementById("modalContainer");
+            modalContainer.style.display = "block";
+        }
+        
+        function closeForm() {
+            var modalContainer = document.getElementById("modalContainer");
+            modalContainer.style.display = "none";
+        }
+    </script>
+
+    </body>
+
+</html>
